@@ -1,48 +1,6 @@
-import {
-  FlatList,
-  Image,
-  Pressable,
-  StyleSheet,
-  Text,
-  View,
-} from "react-native";
+import { FlatList, StyleSheet, View } from "react-native";
 import { MEALS } from "../../dummy-data";
-import { useNavigation } from "@react-navigation/native";
-
-const MealItem = ({
-  id,
-  title,
-  imageUrl,
-  duration,
-  affordability,
-  complexity,
-  bg,
-}) => {
-  const navigation = useNavigation();
-
-  return (
-    <View>
-      <Pressable
-        style={({ pressed }) => [
-          styles.itemContainer,
-          { backgroundColor: bg },
-          pressed && styles.isPressed,
-        ]}
-        onPress={() =>
-          navigation.navigate("MealDetails", {
-            mealId: id,
-          })
-        }
-      >
-        <Image source={{ uri: imageUrl }} style={styles.imgContainer} />
-        <Text style={styles.title}>{title}</Text>
-        <Text style={styles.description}>
-          {duration}M {complexity} {affordability}
-        </Text>
-      </Pressable>
-    </View>
-  );
-};
+import MealItem from "../MealItem";
 
 const MealsOverviewPage = ({ route }) => {
   const { categoryId, bg } = route.params;
@@ -52,7 +10,7 @@ const MealsOverviewPage = ({ route }) => {
   });
 
   return (
-    <View>
+    <View style={styles.container}>
       <FlatList
         data={displayedMeals}
         renderItem={(mi) => (
@@ -73,33 +31,8 @@ const MealsOverviewPage = ({ route }) => {
 };
 
 const styles = StyleSheet.create({
-  itemContainer: {
-    margin: 20,
-    padding: 4,
-    borderWidth: 1,
-    borderRadius: 12,
-  },
-  imgContainer: {
-    width: "100%",
-    height: 124,
-    borderRadius: 12,
-  },
-  title: {
-    textAlign: "center",
-    fontSize: 18,
-    marginTop: 8,
-    marginBottom: 8,
-    fontWeight: "bold",
-    fontFamily: "cursive",
-  },
-  description: {
-    textAlign: "center",
-    textTransform: "capitalize",
-    fontFamily: "monospace",
-  },
-  isPressed: {
-    opacity: 0.75,
-    transform: "scale(0.97)",
+  container: {
+    marginBottom: 68,
   },
 });
 

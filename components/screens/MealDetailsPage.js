@@ -1,28 +1,28 @@
 import { Image, ScrollView, StyleSheet, Text, View } from "react-native";
 import { MEALS } from "../../dummy-data";
-import { useLayoutEffect } from "react";
-import Icon from "../Icon";
+import { CustomBtn } from "../CustomBtn";
+import { useFavMeals } from "../../context/FavMealsContext";
 
-const MealDetailsPage = ({ route, navigation }) => {
+const MealDetailsPage = ({ route }) => {
   const { mealId } = route.params;
+  const { addMealToFavList } = useFavMeals();
 
   const meal = MEALS.filter((e) => e.id === mealId);
 
-  function headerBtnHandler() {
-    console.log("Clicked");
-  }
-
-  useLayoutEffect(() => {
-    navigation.setOptions({
-      headerRight: () => {
-        return <Icon onPress={headerBtnHandler} name="star" />;
-      },
-    });
-  }, [navigation]);
+  const pressHandler = () => {
+    addMealToFavList(meal[0]);
+  };
 
   return (
     <ScrollView style={styles.container}>
-      <Image source={{ uri: meal[0].imageUrl }} style={styles.imgContainer} />
+      <View style={styles.innerContainer}>
+        <Image source={{ uri: meal[0].imageUrl }} style={styles.imgContainer} />
+        <View style={styles.btnContainer}>
+          <CustomBtn meal={meal[0]} pressHandler={pressHandler}>
+            Add to Favorite
+          </CustomBtn>
+        </View>
+      </View>
 
       <Text style={[styles.title, { borderBottomWidth: 0 }]}>
         {meal[0].title}
@@ -58,11 +58,11 @@ const styles = StyleSheet.create({
     paddingLeft: 24,
     paddingRight: 24,
     marginTop: 12,
-    marginBottom: 12,
+    marginBottom: 84,
   },
   imgContainer: {
     width: "100%",
-    height: 164,
+    height: 200,
     borderRadius: 12,
   },
   title: {
@@ -81,6 +81,7 @@ const styles = StyleSheet.create({
     textAlign: "center",
     textTransform: "capitalize",
     fontFamily: "monospace",
+    backgroundColor: "white",
   },
   list: {
     textAlign: "center",
@@ -89,6 +90,14 @@ const styles = StyleSheet.create({
     marginBottom: 4,
     marginTop: 4,
     padding: 4,
+  },
+  innerContainer: {
+    position: "relative",
+  },
+  btnContainer: {
+    position: "absolute",
+    right: 8,
+    top: 12,
   },
 });
 
